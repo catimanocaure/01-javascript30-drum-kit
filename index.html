@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tuatara Drum Kit</title>
+    <style type="text/css">
+        body {
+            background-image: url(images/drums-pic.jpeg);
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .keys-container {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .key {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100px;
+            width: 100px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            margin: 10px;
+            color: white;
+            background: #000;
+            transition: all .08s ease;
+        }
+
+        kbd {
+            font-size: 40px;
+        }
+
+        .big-shape {
+            height: 200px;
+            width: 200px;
+        }
+
+        .medium-shape {
+            height: 140px;
+            width: 140px;
+        }
+
+        .small-shape {
+            height: 80px;
+            width: 80px;
+        }
+
+        .animation {
+            transform: scale(1.1);
+            border-color: #E91212;
+            box-shadow: 0 0 20px #FFD663;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="keys-container">
+            <div data-key="66" class="key medium-shape">
+                <kbd>B</kbd>
+                <span>boom</span>
+            </div>
+            <div data-key="67" class="key medium-shape">
+                <kbd>C</kbd>
+                <span>clap</span>
+            </div>
+            <div data-key="72" class="key small-shape">
+                <kbd>H</kbd>
+                <span>hihat</span>
+            </div>
+            <div data-key="75" class="key big-shape">
+                <kbd>K</kbd>
+                <span>kick</span>
+            </div>
+            <div data-key="84" class="key">
+                <kbd>T</kbd>
+                <span>openhat</span>
+            </div>
+            <div data-key="83" class="key medium-shape">
+                <kbd>S</kbd>
+                <span>snare</span>
+            </div>
+            <div data-key="82" class="key big-shape">
+                <kbd>R</kbd>
+                <span>ride</span>
+            </div>
+            <div data-key="85" class="key small-shape">
+                <kbd>U</kbd>
+                <span>tink</span>
+            </div>
+            <div data-key="78" class="key medium-shape">
+                <kbd>N</kbd>
+                <span>tom</span>
+            </div>
+        </div>
+    </div>
+
+    <audio data-key="67" src="sounds/clap.wav"></audio>
+    <audio data-key="72" src="sounds/hihat.wav"></audio>
+    <audio data-key="75" src="sounds/kick.wav"></audio>
+    <audio data-key="84" src="sounds/openhat.wav"></audio>
+    <audio data-key="66" src="sounds/boom.wav"></audio>
+    <audio data-key="82" src="sounds/ride.wav"></audio>
+    <audio data-key="83" src="sounds/snare.wav"></audio>
+    <audio data-key="78" src="sounds/tom.wav"></audio>
+    <audio data-key="85" src="sounds/tink.wav"></audio>
+
+    <script>
+        function playSound(e) {
+            var audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            var key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+            if (!audio) return;
+            key.classList.add('animation');
+            audio.currentTime = 0; //restart the sound if key been repetidelly pressed
+            audio.play();
+        }
+
+        function removeAnimation(e) {
+            if (e.propertyName !== 'transform') return;
+            e.target.classList.remove('animation');
+        }
+
+        window.addEventListener('keydown', playSound);
+        var keys = Array.from(document.querySelectorAll('.key'))
+        keys.forEach(key => key.addEventListener('transitionend', removeAnimation));
+    </script>
+</body>
+</html>
